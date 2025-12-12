@@ -8,13 +8,13 @@ local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Lighting = game:GetService("Lighting")
 
--- Criar a ScreenGui
+-- Criar GUI
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "HitboxGuiV3"
 
--- Frame principal (360px COMPACTO!)
+-- Frame
 local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 220, 0, 360)
+frame.Size = UDim2.new(0, 220, 0, 320)
 frame.Position = UDim2.new(0, 30, 0, 300)
 frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 frame.BorderSizePixel = 0
@@ -25,12 +25,12 @@ frame.Draggable = true
 local title = Instance.new("TextLabel", frame)
 title.Size = UDim2.new(1, 0, 0, 30)
 title.Text = "📦 Hitbox Shark Gui"
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextColor3 = Color3.new(1,1,1)
 title.BackgroundTransparency = 1
 title.Font = Enum.Font.SourceSansBold
 title.TextSize = 20
 
--- *** 8 BOTÕES (POSIÇÕES AJUSTADAS!) ***
+-- Botões (7 agora)
 local toggleButton = Instance.new("TextButton", frame)
 toggleButton.Size = UDim2.new(0.9, 0, 0, 30)
 toggleButton.Position = UDim2.new(0.05, 0, 0, 35)
@@ -67,69 +67,55 @@ espButton.TextColor3 = Color3.new(1, 1, 1)
 espButton.Font = Enum.Font.SourceSansBold
 espButton.TextSize = 16
 
-local antiButton = Instance.new("TextButton", frame)
-antiButton.Size = UDim2.new(0.9, 0, 0, 30)
-antiButton.Position = UDim2.new(0.05, 0, 0, 155)
-antiButton.Text = "Anti-Cheat: OFF"
-antiButton.BackgroundColor3 = Color3.fromRGB(200, 70, 70)
-antiButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-antiButton.Font = Enum.Font.SourceSansBold
-antiButton.TextSize = 16
-
 local anchorButton = Instance.new("TextButton", frame)
 anchorButton.Size = UDim2.new(0.9, 0, 0, 30)
-anchorButton.Position = UDim2.new(0.05, 0, 0, 195)
+anchorButton.Position = UDim2.new(0.05, 0, 0, 155)
 anchorButton.Text = "Ativar Anchored Shark"
 anchorButton.BackgroundColor3 = Color3.fromRGB(0, 150, 150)
-anchorButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+anchorButton.TextColor3 = Color3.new(1, 1, 1)
 anchorButton.Font = Enum.Font.SourceSansBold
 anchorButton.TextSize = 16
 
 local ragdollButton = Instance.new("TextButton", frame)
 ragdollButton.Size = UDim2.new(0.9, 0, 0, 30)
-ragdollButton.Position = UDim2.new(0.05, 0, 0, 235)
+ragdollButton.Position = UDim2.new(0.05, 0, 0, 195)
 ragdollButton.Text = "Ativar Disable Ragdoll"
 ragdollButton.BackgroundColor3 = Color3.fromRGB(100, 0, 200)
-ragdollButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ragdollButton.TextColor3 = Color3.new(1, 1, 1)
 ragdollButton.Font = Enum.Font.SourceSansBold
 ragdollButton.TextSize = 16
 
 local fogButton = Instance.new("TextButton", frame)
 fogButton.Size = UDim2.new(0.9, 0, 0, 30)
-fogButton.Position = UDim2.new(0.05, 0, 0, 275)
+fogButton.Position = UDim2.new(0.05, 0, 0, 235)
 fogButton.Text = "Remove Fog Water"
 fogButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
-fogButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+fogButton.TextColor3 = Color3.new(1, 1, 1)
 fogButton.Font = Enum.Font.SourceSansBold
 fogButton.TextSize = 16
 
--- *** INPUT + LABEL (AJUSTADOS!) ***
 local inputBox = Instance.new("TextBox", frame)
 inputBox.Size = UDim2.new(0.9, 0, 0, 30)
-inputBox.Position = UDim2.new(0.05, 0, 0, 310)
-inputBox.PlaceholderText = "Tamanho da Hitbox (ex: 3)"
-inputBox.Text = ""
-inputBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-inputBox.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-inputBox.Font = Enum.Font.SourceSans
-inputBox.TextSize = 16
+inputBox.Position = UDim2.new(0.05, 0, 0, 275)
+inputBox.PlaceholderText = "Tamanho da Hitbox"
+inputBox.BackgroundColor3 = Color3.fromRGB(45,45,45)
+inputBox.TextColor3 = Color3.new(1,1,1)
 
 local sizeLabel = Instance.new("TextLabel", frame)
 sizeLabel.Size = UDim2.new(1, 0, 0, 30)
-sizeLabel.Position = UDim2.new(0, 0, 1, -16)
+sizeLabel.Position = UDim2.new(0, 0, 0, 300)
 sizeLabel.Text = "📏 Tamanho: 1x"
-sizeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 sizeLabel.BackgroundTransparency = 1
+sizeLabel.TextColor3 = Color3.new(1,1,1)
 sizeLabel.Font = Enum.Font.SourceSans
-sizeLabel.TextSize = 16
+sizeLabel.TextSize = 14
 
--- *** VARIÁVEIS (SEM FLOAT!) ***
+-- Variáveis
 local hitboxAtivo = false
 local espAtivo = false
 local anchorAtivo = false
 local currentScale = 1
-local antiCheatEnabled = false
-local connections = {}
+local fogAtivo = false
 local ragdollActive = false
 local ragdollConnection = nil
 local ragdollEnv = nil
@@ -191,52 +177,6 @@ local function showNotification(title, text)
     TweenService:Create(notification, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Position = UDim2.new(1, 0, 0, 20)}):Play()
     task.wait(0.5)
     notification:Destroy()
-end
-
--- *** ANTI-CHEAT TURBO ***
-local function activateAntiCheat()
-    if antiCheatEnabled then return end
-    antiCheatEnabled = true
-    
-    local terrainRemote = Workspace.Terrain:FindFirstChild("RemoteEvent")
-    if terrainRemote then
-        terrainRemote.Name = terrainRemote.Name .. "_DISABLED"
-        showNotification("🔒 Anti-Cheat", "RemoteEvent bloqueado!")
-    end
-    
-    table.insert(connections, game.DescendantAdded:Connect(function(obj)
-        if obj:IsA("RemoteEvent") and obj.Name:find("Terrain") then
-            obj.Name = obj.Name .. "_BLOCKED"
-            player:Kick("Anti-Cheat: RemoteEvent Terrain detectado!")
-        end
-    end))
-    
-    local playerScripts = player:FindFirstChild("PlayerScripts")
-    if playerScripts then
-        local loader = playerScripts:FindFirstChild("PlayerScriptsLoader")
-        if loader then
-            table.insert(connections, playerScripts.ChildRemoved:Connect(function(arg1)
-                if arg1.Name == "PlayerScriptsLoader" then
-                    player:Kick("Anti-Cheat: PlayerScriptsLoader removido!")
-                end
-            end))
-            table.insert(connections, loader.Changed:Connect(function()
-                if loader.Disabled then
-                    player:Kick("Anti-Cheat: PlayerScriptsLoader desativado!")
-                end
-            end))
-        end
-    end
-    
-    showNotification("🔒 Anti-Cheat TURBO", "RemoteEvent + Scripts protegidos!")
-end
-
-local function deactivateAntiCheat()
-    if not antiCheatEnabled then return end
-    antiCheatEnabled = false
-    for _, c in ipairs(connections) do c:Disconnect() end
-    connections = {}
-    showNotification("🔓 Anti-Cheat", "Anti-Cheat desativado!")
 end
 
 -- *** FOG ***
@@ -391,17 +331,6 @@ espButton.MouseButton1Click:Connect(function()
     showNotification("👁️ ESP", espAtivo and "ON!" or "OFF!")
 end)
 
-antiButton.MouseButton1Click:Connect(function()
-    if not antiCheatEnabled then
-        activateAntiCheat()
-        antiButton.Text = "Anti-Cheat: ON"
-        antiButton.BackgroundColor3 = Color3.fromRGB(70, 200, 70)
-    else
-        deactivateAntiCheat()
-        antiButton.Text = "Anti-Cheat: OFF"
-        antiButton.BackgroundColor3 = Color3.fromRGB(200, 70, 70)
-    end
-end)
 
 anchorButton.MouseButton1Click:Connect(function()
     anchorAtivo = not anchorAtivo
